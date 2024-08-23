@@ -4,7 +4,7 @@ The **Clickstream** service will collect user events and store the raw data on t
 ```Apache Spark```, ```Presto``` etc. to read processed data in order to use
 it in their business logic.
 
-## Purpose of Service
+# Purpose of Service
 We are collecting user events for the reasons listed below:
 
 1. Recommend better **product** or **content** to users based on their 
@@ -13,7 +13,7 @@ historical behaviour.
 3. Understand how **different page layouts** or **contents** affect users'
 behaviour.
 
-## Used Technologies
+# Used Technologies
 
 | Tecnology             | Purpose                                                                                 |
 | --------------------- | --------------------------------------------------------------------------------------- |
@@ -22,7 +22,7 @@ behaviour.
 | ```Apache Hadoop```   | It stores **validated user event data** and **processed data**.                         |
 | ```Apache Hive```     | It stores **metadata** of **validated user event data**.                                |
 
-## Architecture
+# Architecture
 ```mermaid
 flowchart TD
     %% Event Collector Components
