@@ -1,6 +1,6 @@
 # Welcome project-s
 
-![banner](docs/banner.jpg)
+![banner](docs/images/banner.jpg)
 
-[read technical documentation for more information](docs/README.md)
+[read technical documentation to get more information](docs/index.md)
 
