@@ -17,7 +17,7 @@ timeline
 
 # Services Index
 - [Services](services/index.md)
-    1. [Clickstream](services/clickstream.md)
+    1. [Clickstream](services/clickstream/index.md)
     2. [Backend](services/backend/index.md)
         1. [Customer](services/backend/customer/index.md)
             1. [Authorization](services/backend/customer/authorization.md)

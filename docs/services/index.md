@@ -1,6 +1,6 @@
 # Services Index
 
-1. [Clickstream](clickstream.md)
+1. [Clickstream](clickstream/index.md)
 2. [Backend](backend/index.md)
     1. [Customer](backend/customer/index.md)
         1. [Authorization](backend/customer/authorization.md)
