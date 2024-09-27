@@ -1,6 +1,6 @@
-# Welcome project-s
+# Welcome lamode.com
 
-![banner](docs/images/banner.jpg)
+![icon](docs/images/icon.png)
 
 [read technical documentation to get more information](docs/index.md)
 
