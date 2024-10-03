@@ -12,10 +12,18 @@ import (
 	"sync"
 	"time"
 
-	"github.com/joho/godotenv"
-
 	"lamode.com/collector"
 )
+
+func getenv(key string, shouldExist bool) string {
+	value := os.Getenv(key)
+
+	if value == "" && shouldExist {
+		panic(key + " is not defined")
+	}
+
+	return value
+}
 
 func prompt(version string, addr string) {
 	promptString := `
@@ -31,7 +39,7 @@ func prompt(version string, addr string) {
 
 func run(
 	ctx context.Context,
-	getenv func(string) string,
+	getenv func(string, bool) string,
 	stdout io.Writer,
 	stderr io.Writer,
 ) error {
@@ -39,21 +47,22 @@ func run(
 	defer cancel()
 
 	config := &collector.Config{
-		Version: getenv("COLLECTOR_VERSION"),
-		Host:    getenv("COLLECTOR_HOST"),
-		Port:    getenv("COLLECTOR_PORT"),
+		Version: getenv("COLLECTOR_VERSION", true),
+		Host:    getenv("COLLECTOR_HOST", true),
+		Port:    getenv("COLLECTOR_PORT", true),
 	}
 
 	producerLogger := log.New(stdout, "PRODUCER: ", log.Ltime)
 	producer, err := collector.NewProducer(
 		producerLogger,
-		getenv("KAFKA_HOST"),
-		getenv("KAFKA_PORT"),
-		getenv("KAFKA_TOPIC"),
+		getenv("KAFKA_HOST", true),
+		getenv("KAFKA_PORT", true),
+		getenv("KAFKA_TOPIC", true),
 	)
+	defer producer.Close()
 
 	if err != nil {
-		fmt.Fprintf(stderr, "error occured while creating producer: %s\n", err)
+		return err
 	}
 
 	serverLogger := log.New(stdout, "SERVER: ", log.Ltime)
@@ -94,12 +103,7 @@ func run(
 func main() {
 	ctx := context.Background()
 
-	if err := godotenv.Load(); err != nil {
-		fmt.Fprintf(os.Stderr, "Unexpected error occured: %s\n", err)
-		os.Exit(1)
-	}
-
-	if err := run(ctx, os.Getenv, os.Stdout, os.Stderr); err != nil {
+	if err := run(ctx, getenv, os.Stdout, os.Stderr); err != nil {
 		fmt.Fprintf(os.Stderr, "Unexpected error occured: %s\n", err)
 		os.Exit(1)
 	}

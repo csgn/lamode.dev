@@ -1,1 +1,1 @@
-# Collector Implementation
+# Collector

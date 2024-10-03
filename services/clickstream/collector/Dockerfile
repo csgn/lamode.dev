@@ -17,7 +17,6 @@ RUN git clone https://github.com/edenhill/librdkafka.git && cd librdkafka && ./c
 COPY . .
 RUN go build -tags musl -ldflags "-extldflags -static" -v -o /usr/bin/app ./cmd/collector
 
-COPY .env .
 EXPOSE 8080
 
 CMD ["/usr/bin/app"]

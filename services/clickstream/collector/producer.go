@@ -31,6 +31,19 @@ func NewProducer(
 		return nil, err
 	}
 
+	go func() {
+		for e := range p.Events() {
+			switch ev := e.(type) {
+			case *kafka.Message:
+				if ev.TopicPartition.Error != nil {
+					logger.Printf("Delivery failed: %v\n", ev.TopicPartition)
+				} else {
+					logger.Printf("Delivered message to %v\n", ev.TopicPartition)
+				}
+			}
+		}
+	}()
+
 	newProducer := &Producer{
 		logger: logger,
 		writer: p,
@@ -50,4 +63,8 @@ func (self *Producer) Send(payload []byte) error {
 	}
 
 	return self.writer.Produce(message, nil)
+}
+
+func (self *Producer) Close() {
+	self.writer.Close()
 }

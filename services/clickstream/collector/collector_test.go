@@ -14,9 +14,9 @@ import (
 	tc "github.com/testcontainers/testcontainers-go/modules/compose"
 )
 
-func Test(t *testing.T) {
+func TestCollector(t *testing.T) {
 	// given
-	compose, err := tc.NewDockerCompose("test-kafka-docker-compose.yml")
+	compose, err := tc.NewDockerCompose("resources/docker-compose-kafka-tc.yml")
 	require.NoError(t, err, "NewDockerComposeAPI()")
 	t.Cleanup(func() {
 		require.NoError(t, compose.Down(context.Background(), tc.RemoveOrphans(true), tc.RemoveImagesLocal), "compose.Down()")
@@ -37,11 +37,14 @@ func Test(t *testing.T) {
 	require.NoError(t, err, "NewProducer()")
 
 	t.Run("handleEvent", func(t *testing.T) {
+		// when
 		testPayload := []byte(`{"tv001": "1", "tv002": "1", "tv003": "web"}`)
 		req := httptest.NewRequest(http.MethodPost, "/e", bytes.NewBuffer(testPayload))
 		w := httptest.NewRecorder()
 
 		handleEvent(tLogger, nil, producer).ServeHTTP(w, req)
+
+		// then
 		res := w.Result()
 		defer res.Body.Close()
 		data, err := io.ReadAll(res.Body)
@@ -53,10 +56,13 @@ func Test(t *testing.T) {
 	})
 
 	t.Run("handlePixel", func(t *testing.T) {
+		// when
 		req := httptest.NewRequest(http.MethodGet, "/pixel?tv001=1&tv002=1&tv003=web", nil)
 		w := httptest.NewRecorder()
 
 		handlePixel(tLogger, nil, producer).ServeHTTP(w, req)
+
+		// then
 		res := w.Result()
 		defer res.Body.Close()
 		data, err := io.ReadAll(res.Body)

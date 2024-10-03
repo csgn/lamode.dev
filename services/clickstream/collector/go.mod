@@ -4,7 +4,6 @@ go 1.22.4
 
 require (
 	github.com/confluentinc/confluent-kafka-go/v2 v2.5.4
-	github.com/joho/godotenv v1.5.1
 	github.com/stretchr/testify v1.9.0
 	github.com/testcontainers/testcontainers-go/modules/compose v0.31.0
 )
