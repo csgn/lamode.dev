@@ -25,15 +25,15 @@ func getenv(key string, shouldExist bool) string {
 	return value
 }
 
-func prompt(version string, addr string) {
+func prompt(addr string) {
 	promptString := `
        ┓┓        
     ┏┏┓┃┃┏┓┏╋┏┓┏┓
-    ┗┗┛┗┗┗ ┗┗┗┛┛  v%s
+    ┗┗┛┗┗┗ ┗┗┗┛┛ 
     - Serving at http://%s
     - To close connection CTRL+C
     `
-	fmt.Printf(promptString, version, addr)
+	fmt.Printf(promptString, addr)
 	fmt.Println()
 }
 
@@ -47,9 +47,8 @@ func run(
 	defer cancel()
 
 	config := &collector.Config{
-		Version: getenv("COLLECTOR_VERSION", true),
-		Host:    getenv("COLLECTOR_HOST", true),
-		Port:    getenv("COLLECTOR_PORT", true),
+		Host: getenv("COLLECTOR_HOST", true),
+		Port: getenv("COLLECTOR_PORT", true),
 	}
 
 	producerLogger := log.New(stdout, "PRODUCER: ", log.Ltime)
@@ -74,7 +73,7 @@ func run(
 	}
 
 	go func() {
-		prompt(config.Version, httpServer.Addr)
+		prompt(httpServer.Addr)
 		if err := httpServer.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			fmt.Fprintf(stderr, "error serving: %s\n", err)
 		}
