@@ -1,4 +1,6 @@
-##### [Home](/docs/index.md)/[Services](/docs/services/index.md)/Clickstream
+[Home](/docs/index.md) / 
+[Services](/docs/services/index.md) / 
+Clickstream
 
 # Overview
 The **Clickstream** service will collect user events and store the raw data on the 

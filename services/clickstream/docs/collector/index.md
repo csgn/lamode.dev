@@ -1,10 +1,15 @@
-##### [Home](/docs/index.md)/[Services](/docs/services/index.md)/[Clickstream](/docs/services/clickstream/index.md)/[Components](/services/clickstream/docs/index.md)/Collector
-##### [Changelog](/services/clickstream/collector/CHANGELOG/README.md)
+[Home](/docs/index.md) /
+[Services](/docs/services/index.md) /
+[Clickstream](/docs/services/clickstream/index.md) /
+[Components](/services/clickstream/docs/index.md) /
+Collector
+
+[Changelog](/services/clickstream/collector/CHANGELOG/README.md)
 
 # Overview
 The `Collector`, collects the `raw event(s)` data from the source and sends it
-into the specified `Kafka` topic. The Collector contains an HTTP server. 
-The HTTP server provides [endpoints](#endpoints) in order to collects event(s).
+into the specified `Kafka` topic. The Collector provides an HTTP server 
+and the server provides [endpoints](#endpoints) in order to collects event(s).
 
 # Architecture
 ```mermaid
@@ -67,7 +72,7 @@ Date: Thu, 03 Oct 2024 13:56:42 GMT
 
 ## Notes
 In principle, events are sent by means of `Beacon API`. But some clients don't
-support that. Therefore, we should use the `/pixel` endpoint in that case. the `/pixel`
+support that. Therefore, we should use the `/pixel` endpoint in that case. The `/pixel`
 sends the event data within its query and returns a `1px` image as response.
 
 Both endpoint responses are returns `200 OK` because we won't show an error
