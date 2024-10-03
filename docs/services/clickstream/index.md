@@ -1,3 +1,5 @@
+##### [Home](/docs/index.md)/[Services](/docs/services/index.md)/Clickstream
+
 # Overview
 The **Clickstream** service will collect user events and store the raw data on the 
 ```Apache Hadoop``` cluster, and **internal consumers** can access the cluster via
@@ -14,8 +16,7 @@ historical behaviour.
 behaviour.
 
 # Used Technologies
-
-| Tecnology             | Purpose                                                                                 |
+| Technology            | Purpose                                                                                 |
 | --------------------- | --------------------------------------------------------------------------------------- |
 | ```Apache Spark```    | It performs **Extract-Transform-Load** ***(ETL)*** job.                                 |
 | ```Apache Kafka```    | It collects **validated event data** from the service and stores in specific topics.    |
@@ -82,7 +83,7 @@ flowchart TD
     %% Relations
         EXTERNAL_USER -.-> event_collector
         
-        EC_GO -- "raw event" --> EC_KAFKA -- "validated event" --> HADOOP
+        EC_GO -- "raw event" --> EC_KAFKA -- "raw event" --> HADOOP
 
         HADOOP -- "read raw event" --> DP_SPARK
 
@@ -92,3 +93,6 @@ flowchart TD
         HADOOP -. "read" .-> internal_consumers
     %% %
 ```
+
+# Components
+[🔗 Documentation of Clickstream Components](/services/clickstream/docs/index.md)

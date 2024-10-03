@@ -1,6 +1,9 @@
-# Welcome lamode.com
+# Welcome lamode
 
-![icon](docs/images/icon.png)
+<p align="center">
+    <img src="/docs/images/icon.png" width="256" height="256" />
+</p>
 
-[read technical documentation to get more information](docs/index.md)
-
+<p align="center">
+    <a href="/docs/index.md">Technical Documentation</a>
+</p>
