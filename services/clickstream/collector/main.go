@@ -11,8 +11,6 @@ import (
 	"os/signal"
 	"sync"
 	"time"
-
-	"lamode.com/collector"
 )
 
 func getenv(key string, shouldExist bool) string {
@@ -46,13 +44,13 @@ func run(
 	ctx, cancel := signal.NotifyContext(ctx, os.Interrupt)
 	defer cancel()
 
-	config := &collector.Config{
+	config := &Config{
 		Host: getenv("COLLECTOR_HOST", true),
 		Port: getenv("COLLECTOR_PORT", true),
 	}
 
 	producerLogger := log.New(stdout, "PRODUCER: ", log.Ltime)
-	producer, err := collector.NewProducer(
+	producer, err := NewProducer(
 		producerLogger,
 		getenv("KAFKA_HOST", true),
 		getenv("KAFKA_PORT", true),
@@ -65,7 +63,7 @@ func run(
 	}
 
 	serverLogger := log.New(stdout, "SERVER: ", log.Ltime)
-	srv := collector.NewServer(serverLogger, config, producer)
+	srv := NewServer(serverLogger, config, producer)
 
 	httpServer := &http.Server{
 		Addr:    net.JoinHostPort(config.Host, config.Port),
