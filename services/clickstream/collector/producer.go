@@ -1,70 +1,63 @@
 package main
 
 import (
-	"fmt"
+	"errors"
 	"log"
 
 	"github.com/confluentinc/confluent-kafka-go/v2/kafka"
 )
 
-type Producer struct {
-	logger *log.Logger
-	writer *kafka.Producer
-	topic  string
-}
+type AsyncProducer kafka.Producer
 
-func NewProducer(
-	logger *log.Logger,
-	host string,
-	port string,
-	topic string,
-) (*Producer, error) {
-	bootstrapServers := fmt.Sprintf("%s:%s", host, port)
-
+func NewProducer(addr string) *AsyncProducer {
 	p, err := kafka.NewProducer(
 		&kafka.ConfigMap{
-			"bootstrap.servers": bootstrapServers,
+			"bootstrap.servers": addr,
 		},
 	)
 
 	if err != nil {
-		return nil, err
+		log.Fatalln("Failed to start Kafka producer: ", err)
 	}
 
-	go func() {
-		for e := range p.Events() {
-			switch ev := e.(type) {
-			case *kafka.Message:
-				if ev.TopicPartition.Error != nil {
-					logger.Printf("Delivery failed: %v\n", ev.TopicPartition)
-				} else {
-					logger.Printf("Delivered message to %v\n", ev.TopicPartition)
+	if *verbose {
+		go func() {
+			for e := range p.Events() {
+				switch ev := e.(type) {
+				case *kafka.Error:
+					log.Printf("Kafka error: %v\n", ev)
+					if ev.IsFatal() {
+						log.Fatalf("Fatal Kafka error: %v\n", ev)
+					}
+				default:
+					log.Printf("Kafka event: %v\n", ev)
 				}
 			}
-		}
-	}()
-
-	newProducer := &Producer{
-		logger: logger,
-		writer: p,
-		topic:  topic,
+		}()
 	}
 
-	return newProducer, nil
+	return (*AsyncProducer)(p)
 }
 
-func (self *Producer) Send(payload []byte) error {
-	message := &kafka.Message{
+func (p *AsyncProducer) SendMessage(payload []byte, topic string) error {
+	msg := &kafka.Message{
 		TopicPartition: kafka.TopicPartition{
-			Topic:     &self.topic,
+			Topic:     &topic,
 			Partition: kafka.PartitionAny,
 		},
 		Value: payload,
 	}
 
-	return self.writer.Produce(message, nil)
+	return (*kafka.Producer)(p).Produce(msg, nil)
 }
 
-func (self *Producer) Close() {
-	self.writer.Close()
+func (p *AsyncProducer) Shutdown() error {
+	var pp = (*kafka.Producer)(p)
+	pp.Close()
+
+	if !pp.IsClosed() {
+		return errors.New("Failed to close the producer cleanly")
+	}
+
+	return nil
 }

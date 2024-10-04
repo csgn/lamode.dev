@@ -2,22 +2,47 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
-	"log"
 	"net/http"
 	"net/url"
+	"strings"
 )
 
-type Config struct {
-	Host    string
-	Port    string
+var tempData = []byte{
+	0x47, 0x49, 0x46, 0x38, 0x39, 0x61, 0x01, 0x00,
+	0x01, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0xFF, 0xFF, 0xFF, 0x21, 0xF9, 0x04, 0x01, 0x00,
+	0x00, 0x00, 0x00, 0x2C, 0x00, 0x00, 0x00, 0x00,
+	0x01, 0x00, 0x01, 0x00, 0x00, 0x02, 0x01, 0x44,
+	0x00, 0x3B,
 }
 
-func handleEvent(
-	logger *log.Logger,
-	config *Config,
-	producer *Producer,
-) http.Handler {
+type Server struct {
+	Addr          string
+	AsyncProducer *AsyncProducer
+}
+
+func (s *Server) prompt() {
+	promptString := `
+       ┓┓        
+    ┏┏┓┃┃┏┓┏╋┏┓┏┓
+    ┗┗┛┗┗┗ ┗┗┗┛┛ 
+    - Serving at http://%s:%s
+    - To close connection CTRL+C
+    `
+	addr := strings.Split(s.Addr, ":")
+	host := addr[0]
+	if host == "" {
+		host = "localhost"
+	}
+
+	port := addr[1]
+	fmt.Printf(promptString, host, port)
+	fmt.Println()
+}
+
+func (s *Server) handleEvent() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == http.MethodPost {
 			payload, err := io.ReadAll(r.Body)
@@ -25,18 +50,18 @@ func handleEvent(
 				return
 			}
 
-			producer.Send(payload)
+			go func() {
+				if err := s.AsyncProducer.SendMessage(payload, *kafkaTopic); err != nil {
+					return
+				}
+			}()
 		}
 
 		w.WriteHeader(http.StatusOK)
 	})
 }
 
-func handlePixel(
-	logger *log.Logger,
-	config *Config,
-	producer *Producer,
-) http.Handler {
+func (s *Server) handlePixel() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == http.MethodGet {
 			values, err := url.ParseQuery(r.URL.Query().Encode())
@@ -56,16 +81,11 @@ func handlePixel(
 				return
 			}
 
-			producer.Send(payload)
-		}
-
-		tempData := []byte{
-			0x47, 0x49, 0x46, 0x38, 0x39, 0x61, 0x01, 0x00,
-			0x01, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00,
-			0xFF, 0xFF, 0xFF, 0x21, 0xF9, 0x04, 0x01, 0x00,
-			0x00, 0x00, 0x00, 0x2C, 0x00, 0x00, 0x00, 0x00,
-			0x01, 0x00, 0x01, 0x00, 0x00, 0x02, 0x01, 0x44,
-			0x00, 0x3B,
+			go func() {
+				if err := s.AsyncProducer.SendMessage(payload, *kafkaTopic); err != nil {
+					return
+				}
+			}()
 		}
 
 		w.Header().Set("Content-Type", "image/gif")
@@ -74,11 +94,29 @@ func handlePixel(
 	})
 }
 
-func NewServer(logger *log.Logger, config *Config, producer *Producer) http.Handler {
+func (s *Server) Handler() http.Handler {
 	mux := http.NewServeMux()
 
-	mux.Handle("/e", handleEvent(logger, config, producer))
-	mux.Handle("/pixel", handlePixel(logger, config, producer))
+	mux.Handle("/e", s.handleEvent())
+	mux.Handle("/pixel", s.handlePixel())
 
 	return mux
+}
+
+func (s *Server) Run() error {
+	httpServer := &http.Server{
+		Addr:    s.Addr,
+		Handler: s.Handler(),
+	}
+
+	s.prompt()
+	return httpServer.ListenAndServe()
+}
+
+func (s *Server) Close() error {
+	if err := s.AsyncProducer.Shutdown(); err != nil {
+		return err
+	}
+
+	return nil
 }

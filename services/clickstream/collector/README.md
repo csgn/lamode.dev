@@ -1,21 +1,27 @@
 # Collector
 
-## Build
+## Usage
 ```sh
-$ go mod download
-$ go mod verify
-$ go build -v -o ./build/collector ./cmd/collector
+$ go run . -help
+Usage of collector:
+  -addr string
+        The address to bind to (default ":50051")
+  -env string
+        Environment of program (default "dev")
+  -kafka-addr string
+        Kafka bootstrap servers (default ":9092")
+  -kafka-topic string
+        Kafka topic (default "clickstream-test")
+  -verbose
+        Turn on some debugging logs
+
+# You can also use env variables
+$ APP_ADDR=":8080" ENV="prod" KAFKA_ADDR=":9092" go run .
 ```
 
-## Run
+## Build
 ```sh
-$ COLLECTOR_VERSION=$(cat version) \
-  COLLECTOR_HOST=<HOST> \
-  COLLECTOR_PORT=<PORT> \
-  KAFKA_HOST=<KAFKA_HOST> \
-  KAFKA_PORT=<KAFKA_PORT> \
-  KAFKA_TOPIC=<KAFKA_TOPIC> \
-  ./build/collector
+docker build -t <CONTAINER_TAG> ./
 ```
 
 ## Test

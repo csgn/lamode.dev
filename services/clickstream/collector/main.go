@@ -1,107 +1,96 @@
 package main
 
 import (
-	"context"
-	"fmt"
-	"io"
+	"flag"
 	"log"
-	"net"
-	"net/http"
 	"os"
-	"os/signal"
-	"sync"
-	"time"
+	"strconv"
 )
 
-func getenv(key string, shouldExist bool) string {
-	value := os.Getenv(key)
+const (
+	defaultEnv        = "dev"
+	defaultVerbose    = false
+	defaultAppAddr    = ":8080"
+	defaultKafkaAddr  = ":9092"
+	defaultKafkaTopic = "clickstream-test"
+)
 
-	if value == "" && shouldExist {
-		panic(key + " is not defined")
-	}
-
-	return value
-}
-
-func prompt(addr string) {
-	promptString := `
-       ┓┓        
-    ┏┏┓┃┃┏┓┏╋┏┓┏┓
-    ┗┗┛┗┗┗ ┗┗┗┛┛ 
-    - Serving at http://%s
-    - To close connection CTRL+C
-    `
-	fmt.Printf(promptString, addr)
-	fmt.Println()
-}
-
-func run(
-	ctx context.Context,
-	getenv func(string, bool) string,
-	stdout io.Writer,
-	stderr io.Writer,
-) error {
-	ctx, cancel := signal.NotifyContext(ctx, os.Interrupt)
-	defer cancel()
-
-	config := &Config{
-		Host: getenv("COLLECTOR_HOST", true),
-		Port: getenv("COLLECTOR_PORT", true),
-	}
-
-	producerLogger := log.New(stdout, "PRODUCER: ", log.Ltime)
-	producer, err := NewProducer(
-		producerLogger,
-		getenv("KAFKA_HOST", true),
-		getenv("KAFKA_PORT", true),
-		getenv("KAFKA_TOPIC", true),
+var (
+	addr = flag.String(
+		"addr",
+		getenv("APP_ADDR", defaultAppAddr),
+		"The address to bind to",
 	)
-	defer producer.Close()
+	kafkaAddr = flag.String(
+		"kafka-addr",
+		getenv("KAFKA_ADDR", defaultKafkaAddr),
+		"Kafka bootstrap servers",
+	)
+	kafkaTopic = flag.String(
+		"kafka-topic",
+		getenv("KAFKA_TOPIC", defaultKafkaTopic),
+		"Kafka topic",
+	)
+	env = flag.String(
+		"env",
+		getenv("ENV", defaultEnv),
+		"Environment of Collector",
+	)
+	verbose = flag.Bool(
+		"verbose",
+		getenv("VERBOSE", defaultVerbose),
+		"Turn on some debugging logs",
+	)
+)
 
-	if err != nil {
-		return err
+func getenv[T any](key string, defaultValue T) T {
+	var result any
+
+	if value, ok := os.LookupEnv(key); ok {
+		switch any(defaultValue).(type) {
+		case string:
+			result = value
+		case int:
+			parsed, err := strconv.Atoi(value)
+			if err != nil {
+				log.Fatalf("Parse error: %s\n", key)
+			}
+			result = parsed
+		case bool:
+			parsed, err := strconv.ParseBool(value)
+			if err != nil {
+				log.Fatalf("Parse error: %s\n", key)
+			}
+
+			result = parsed
+		default:
+			return defaultValue
+		}
+
+		return result.(T)
 	}
 
-	serverLogger := log.New(stdout, "SERVER: ", log.Ltime)
-	srv := NewServer(serverLogger, config, producer)
-
-	httpServer := &http.Server{
-		Addr:    net.JoinHostPort(config.Host, config.Port),
-		Handler: srv,
-	}
-
-	go func() {
-		prompt(httpServer.Addr)
-		if err := httpServer.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-			fmt.Fprintf(stderr, "error serving: %s\n", err)
-		}
-	}()
-
-	var wg sync.WaitGroup
-	wg.Add(1)
-
-	go func() {
-		defer wg.Done()
-		<-ctx.Done()
-		shutdownCtx := context.Background()
-		shutdownCtx, cancel := context.WithTimeout(shutdownCtx, time.Second)
-		defer cancel()
-
-		if err := httpServer.Shutdown(shutdownCtx); err != nil {
-			fmt.Fprintf(stderr, "error shutting down http server: %s\n", err)
-		}
-	}()
-
-	wg.Wait()
-
-	return nil
+	return defaultValue
 }
 
 func main() {
-	ctx := context.Background()
+	flag.Parse()
 
-	if err := run(ctx, getenv, os.Stdout, os.Stderr); err != nil {
-		fmt.Fprintf(os.Stderr, "Unexpected error occured: %s\n", err)
+	if *addr == "" || *kafkaAddr == "" || *kafkaTopic == "" {
+		flag.PrintDefaults()
 		os.Exit(1)
 	}
+
+	s := &Server{
+		Addr:          *addr,
+		AsyncProducer: NewProducer(*kafkaAddr),
+	}
+
+	defer func() {
+		if err := s.Close(); err != nil {
+			log.Printf("error shutting down http server: %s\n", err)
+		}
+	}()
+
+	log.Fatal(s.Run())
 }

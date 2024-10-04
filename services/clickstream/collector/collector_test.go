@@ -4,10 +4,8 @@ import (
 	"bytes"
 	"context"
 	"io"
-	"log"
 	"net/http"
 	"net/http/httptest"
-	"os"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -27,14 +25,10 @@ func TestCollector(t *testing.T) {
 
 	require.NoError(t, compose.Up(ctx, tc.Wait(true)), "compose.Up()")
 
-	tLogger := log.New(os.Stdout, "test", log.Ltime)
-	producer, err := NewProducer(
-		tLogger,
-		"localhost",
-		"9093",
-		"test-topic",
-	)
-	require.NoError(t, err, "NewProducer()")
+	s := &Server{
+		Addr:          "",
+		AsyncProducer: NewProducer(":9093"),
+	}
 
 	t.Run("handleEvent", func(t *testing.T) {
 		// when
@@ -42,7 +36,7 @@ func TestCollector(t *testing.T) {
 		req := httptest.NewRequest(http.MethodPost, "/e", bytes.NewBuffer(testPayload))
 		w := httptest.NewRecorder()
 
-		handleEvent(tLogger, nil, producer).ServeHTTP(w, req)
+		s.handleEvent().ServeHTTP(w, req)
 
 		// then
 		res := w.Result()
@@ -60,7 +54,7 @@ func TestCollector(t *testing.T) {
 		req := httptest.NewRequest(http.MethodGet, "/pixel?tv001=1&tv002=1&tv003=web", nil)
 		w := httptest.NewRecorder()
 
-		handlePixel(tLogger, nil, producer).ServeHTTP(w, req)
+		s.handlePixel().ServeHTTP(w, req)
 
 		// then
 		res := w.Result()

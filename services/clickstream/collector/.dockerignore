@@ -1,4 +1,1 @@
-*.yml
-*.md
-*.sh
-LICENSE
+vendor/
