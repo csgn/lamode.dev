@@ -1,10 +1,10 @@
-[Home](/docs/index.md) /
-[Services](/docs/services/index.md) /
-[Clickstream](/docs/services/clickstream/index.md) /
-[Components](/services/clickstream/docs/index.md) /
-Collector
-
-[Changelog](/services/clickstream/collector/CHANGELOG/README.md)
+<p>
+    <a href="/docs/index.md">Home</a> /
+    <a href="/docs/services/index.md">Services</a> /
+    <a href="/docs/services/clickstream/index.md">Clickstream</a> /
+    <a href="/services/clickstream/docs/index.md">Components</a> /
+    <span>Collector</span>
+</p>
 
 # Overview
 The `Collector`, collects the `raw event(s)` data from the source and sends it
@@ -71,9 +71,10 @@ Date: Thu, 03 Oct 2024 13:56:42 GMT
 ```
 
 ## Notes
-In principle, events are sent by means of `Beacon API`. But some clients don't
-support that. Therefore, we should use the `/pixel` endpoint in that case. The `/pixel`
-sends the event data within its query and returns a `1px` image as response.
+In principle, events are sent by means of `Beacon API` but some 
+clients, however, may not support. Therefore, we should use 
+the `/pixel` endpoint in that case. The `/pixel` sends the event data within
+its query and returns a `1px` image as a response.
 
 Both endpoint responses are returns `200 OK` because we won't show an error
 on the client side or resend the event. We always assume that the events which we sent,
@@ -96,3 +97,19 @@ img.onload = function() {
 ```
 
 Eventually, it's up to you that how to use these endpoints in your project.
+
+# Events
+As follows, the table shows us the event types:
+> `tv` stands for `telemetry variable`
+
+| Code      | Value                                 | Description           |
+| -----     | ---                                   | -----                 |
+| `tv001`   | `string`                              | `pid`                 |
+| `tv002`   | `string`                              | `sid`                 |
+| `tv003`   | `web` \| `mobile`                     | `channel`             |
+| `tv004`   | `click` \| `impression`               | `event action`        |
+| `tv005`   | `search` \| `ad` \| `component`       | `event group`         |
+| `tv006`   | `beacon` \| `other`                   | `sender`              |
+
+# Changelogs
+- [v0.1.0-alpha.1 - 03/10/2024](/services/clickstream/src/collector/CHANGELOG.md#v010-alpha1---03102024)

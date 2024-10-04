@@ -1,8 +1,10 @@
-[Home](/docs/index.md) /
-[Services](/docs/services/index.md) /
-[Clickstream](/docs/services/clickstream/index.md) /
-Components
+<p>
+    <a href="/docs/index.md">Home</a> /
+    <a href="/docs/services/index.md">Services</a> /
+    <a href="/docs/services/clickstream/index.md">Clickstream</a> /
+    <span>Components</span>
+</p>
 
-
+# Components
 1. [Collector](collector/index.md)
 2. [Kafka](kafka/index.md)

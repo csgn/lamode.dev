@@ -1,0 +1,14 @@
+services:
+  collector:
+    build:
+      context: ../src/collector
+      dockerfile: Dockerfile
+    ports:
+      - "8080:50051"
+    environment:
+      KAFKA_ADDR: "kafka:9092"
+      KAFKA_TOPIC: clickstream-test
+      VERBOSE: 1
+      ENV: prod
+    depends_on:
+      - kafka

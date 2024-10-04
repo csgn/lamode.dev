@@ -1,6 +1,8 @@
-[Home](/docs/index.md) / 
-[Services](/docs/services/index.md) / 
-Clickstream
+<p>
+    <a href="/docs/index.md">Home</a> /
+    <a href="/docs/services/index.md">Services</a> /
+    <span>Clickstream</span>
+</p>
 
 # Overview
 The **Clickstream** service will collect user events and store the raw data on the 
@@ -16,14 +18,6 @@ historical behaviour.
 2. Creating **advertising campaigns** based on users' behaviour.
 3. Understand how **different page layouts** or **contents** affect users'
 behaviour.
-
-# Used Technologies
-| Technology            | Purpose                                                                                 |
-| --------------------- | --------------------------------------------------------------------------------------- |
-| ```Apache Spark```    | It performs **Extract-Transform-Load** ***(ETL)*** job.                                 |
-| ```Apache Kafka```    | It collects **validated event data** from the service and stores in specific topics.    |
-| ```Apache Hadoop```   | It stores **validated user event data** and **processed data**.                         |
-| ```Apache Hive```     | It stores **metadata** of **validated user event data**.                                |
 
 # Architecture
 ```mermaid
