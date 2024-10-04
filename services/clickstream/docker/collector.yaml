@@ -1,14 +1,19 @@
+name: clickstream
+
 services:
   collector:
     build:
       context: ../src/collector
       dockerfile: Dockerfile
     ports:
-      - "8080:50051"
-    environment:
-      KAFKA_ADDR: "kafka:9092"
-      KAFKA_TOPIC: clickstream-test
-      VERBOSE: 1
-      ENV: prod
+      - ${APP_PORT}:${APP_PORT}
+    networks:
+      - app-tier
     depends_on:
       - kafka
+    environment:
+      APP_ADDR: ${APP_ADDR}
+      KAFKA_ADDR: ${KAFKA_ADDR}
+      KAFKA_TOPIC: ${KAFKA_TOPIC}
+      VERBOSE: ${VERBOSE}
+      ENV: ${ENV}
