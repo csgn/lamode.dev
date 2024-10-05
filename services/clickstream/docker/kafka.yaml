@@ -1,12 +1,8 @@
-name: clickstream
-
 services:
   zookeeper:
     image: confluentinc/cp-zookeeper:7.5.0
     ports:
       - 2181:2181
-    networks:
-      - app-tier
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
@@ -14,13 +10,19 @@ services:
   kafka:
     image: confluentinc/cp-kafka:7.5.0
     ports:
-      - ${KAFKA_PORT}:${KAFKA_PORT}
-    networks:
-      - app-tier
+      - ${KAFKA_PORT:?error}:${KAFKA_PORT:?error}
+      - 9093:9093
     depends_on:
       - zookeeper
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:${KAFKA_PORT}
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://${KAFKA_ADDR:?error},PLAINTEXT_HOST://localhost:9093
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    healthcheck:
+      test: /bin/kafka-cluster cluster-id --bootstrap-server ${KAFKA_ADDR:?error} || exit 1
+      interval: 10s
+      timeout: 60s
+      retries: 60

@@ -1,19 +1,16 @@
-name: clickstream
-
 services:
   collector:
     build:
       context: ../src/collector
       dockerfile: Dockerfile
     ports:
-      - ${APP_PORT}:${APP_PORT}
-    networks:
-      - app-tier
+      - ${APP_PORT:?error}:${APP_PORT:?error}
     depends_on:
-      - kafka
+      kafka:
+        condition: service_healthy
     environment:
-      APP_ADDR: ${APP_ADDR}
-      KAFKA_ADDR: ${KAFKA_ADDR}
-      KAFKA_TOPIC: ${KAFKA_TOPIC}
-      VERBOSE: ${VERBOSE}
-      ENV: ${ENV}
+      APP_ADDR: ${APP_ADDR:?error}
+      KAFKA_ADDR: ${KAFKA_ADDR:?error}
+      KAFKA_TOPIC: ${KAFKA_TOPIC:?error}
+      VERBOSE: ${VERBOSE:?error}
+      ENV: ${ENV:?error}

@@ -1,0 +1,9 @@
+ENV=prod
+KAFKA_HOST=kafka
+KAFKA_PORT=9092
+KAFKA_ADDR=kafka:9092
+KAFKA_TOPIC=clickstream-prod-topic
+VERBOSE=0
+APP_HOST=collector
+APP_PORT=50051
+APP_ADDR=collector:50051

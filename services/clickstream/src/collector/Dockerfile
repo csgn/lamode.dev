@@ -14,8 +14,7 @@ RUN CGO_ENABLED=1 GOOS=linux GOARACH=amd64 GO111MODULE=on go build -tags musl -l
 FROM scratch
 WORKDIR /app
 COPY --from=builder /go/bin/collector /app/collector
-ENV APP_ADDR=":50051"
 
-EXPOSE 50051
+EXPOSE ${APP_PORT}
 
 ENTRYPOINT ["/app/collector"]

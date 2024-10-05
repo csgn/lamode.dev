@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
+	"time"
 )
 
 var tempData = []byte{
@@ -27,9 +28,10 @@ func (s *Server) prompt() {
 	promptString := `
        ┓┓        
     ┏┏┓┃┃┏┓┏╋┏┓┏┓
-    ┗┗┛┗┗┗ ┗┗┗┛┛ 
+    ┗┗┛┗┗┗ ┗┗┗┛┛  %s
     - Serving at http://%s:%s
     - To close connection CTRL+C
+    - %s
     `
 	addr := strings.Split(s.Addr, ":")
 	host := addr[0]
@@ -38,8 +40,14 @@ func (s *Server) prompt() {
 	}
 
 	port := addr[1]
-	fmt.Printf(promptString, host, port)
+	fmt.Printf(promptString, *env, host, port, time.Now())
 	fmt.Println()
+}
+
+func (s *Server) handleHealthcheck() http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+	})
 }
 
 func (s *Server) handleEvent() http.Handler {
@@ -99,6 +107,7 @@ func (s *Server) Handler() http.Handler {
 
 	mux.Handle("/e", s.handleEvent())
 	mux.Handle("/pixel", s.handlePixel())
+	mux.Handle("/healthcheck", s.handleHealthcheck())
 
 	return mux
 }
