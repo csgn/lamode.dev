@@ -5,6 +5,7 @@ import (
 	"log"
 
 	"github.com/confluentinc/confluent-kafka-go/v2/kafka"
+	"github.com/google/uuid"
 )
 
 type AsyncProducer kafka.Producer
@@ -45,6 +46,7 @@ func (p *AsyncProducer) SendMessage(payload []byte, topic string) error {
 			Topic:     &topic,
 			Partition: kafka.PartitionAny,
 		},
+		Key:   []byte(uuid.New().String()),
 		Value: payload,
 	}
 
