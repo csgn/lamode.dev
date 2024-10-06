@@ -6,34 +6,34 @@ DEPLOYMENT_DIR := $(PROJECT_DIR)/docker
 MODES_DIR := $(DEPLOYMENT_DIR)/modes
 CMD := docker compose
 COMPOSE_ENTRYPOINT := $(DEPLOYMENT_DIR)/compose.yaml
+
+modes := $(shell find $(MODES_DIR) -maxdepth 1 -type f -iname "*.env" -exec basename {} .env \; | sed ':a;N;$$!ba;s/\n/ | /g')
+
+ifndef MODE
+    $(error MODE does not specified. Example Usage: MODE=($(modes)) make up)
+else
+    MODE_FILE := $(MODES_DIR)/$(MODE).env
+endif
+
+ifeq ("$(wildcard $(MODE_FILE))", "")
+    $(error '$(MODE)' does not exist. Try ($(modes)))
+endif
+
 PRE_FLAGS := --file $(COMPOSE_ENTRYPOINT) 				\
 			 --project-name $(PROJECT_NAME) 			\
 			 --project-directory $(DEPLOYMENT_DIR)		\
-			 --env-file $(MODES_DIR)/$(MODE)
+			 --env-file $(MODE_FILE)
 POST_FLAGS := --build --detach
 
-modes := $(shell ls $(MODES_DIR) | sed ':a;N;$$!ba;s/\n/ | /g')
 
-all:
-ifndef MODE
-	$(error MODE not defined. Example Usage: MODE=($(modes)) make up)
-endif
-
-ifeq ("$(wildcard $(MODES_DIR)/$(MODE))", "")
-	$(error '$(MODE)' does not exist. Try ($(modes)))
-endif
-
-	$(info Using environment variables)
-	$(info $(shell cat $(MODES_DIR)/$(MODE)))
-
-up: all
+up:
 	$(CMD) $(PRE_FLAGS) up $(POST_FLAGS)
 
-down: all
+down:
 	$(CMD) $(PRE_FLAGS) down
 
-stop: all
+stop:
 	$(CMD) $(PRE_FLAGS) stop
 
-config: all
+config:
 	$(CMD) $(PRE_FLAGS) config
