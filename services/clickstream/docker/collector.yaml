@@ -4,12 +4,12 @@ services:
       context: ../src/collector
       dockerfile: Dockerfile
     ports:
-      - ${APP_PORT:?error}:${APP_PORT:?error}
+      - ${COLLECTOR_PORT:?error}:${COLLECTOR_PORT:?error}
     depends_on:
       kafka:
         condition: service_healthy
     environment:
-      APP_ADDR: ${APP_ADDR:?error}
+      APP_ADDR: ${COLLECTOR_ADDR:?error}
       KAFKA_ADDR: ${KAFKA_ADDR:?error}
       KAFKA_TOPIC: ${KAFKA_TOPIC:?error}
       VERBOSE: ${VERBOSE:?error}
