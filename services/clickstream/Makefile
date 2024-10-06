@@ -12,12 +12,19 @@ PRE_FLAGS := --file $(COMPOSE_ENTRYPOINT) 				\
 			 --env-file $(MODES_DIR)/$(MODE)
 POST_FLAGS := --build --detach
 
+modes := $(shell ls $(MODES_DIR) | sed ':a;N;$$!ba;s/\n/ | /g')
+
 all:
 ifndef MODE
-	$(error MODE not defined. Example Usage: MODE=dev make up)
+	$(error MODE not defined. Example Usage: MODE=($(modes)) make up)
 endif
-	@echo "Using environment variables:"
-	@echo $(shell cat $(MODES_DIR)/$(MODE))
+
+ifeq ("$(wildcard $(MODES_DIR)/$(MODE))", "")
+	$(error '$(MODE)' does not exist. Try ($(modes)))
+endif
+
+	$(info Using environment variables)
+	$(info $(shell cat $(MODES_DIR)/$(MODE)))
 
 up: all
 	$(CMD) $(PRE_FLAGS) up $(POST_FLAGS)
