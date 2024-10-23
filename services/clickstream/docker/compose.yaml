@@ -2,3 +2,4 @@ include:
   - docker/kafka.yaml
   - docker/collector.yaml
   - docker/validator.yaml
+  - docker/hadoop.yaml
