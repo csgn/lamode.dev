@@ -16,7 +16,7 @@ ENV HADOOP_TGZ_URL=https://dlcdn.apache.org/hadoop/common/hadoop-${HADOOP_VERSIO
 ENV HADOOP_HOME=/hadoop
 
 WORKDIR /hadoop
-RUN wget -nv -O hadoop.tgz "${HADOOP_TGZ_URL}"; \
+RUN wget -nv -O hadoop.tar.gz "${HADOOP_TGZ_URL}"; \
     tar -xf hadoop.tar.gz --strip-components 1; \
     rm hadoop.tar.gz; \
     rm -rf ${HADOOP_HOME}/share/doc
