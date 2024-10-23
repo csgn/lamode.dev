@@ -1,5 +1,5 @@
 NAME := clickstream
-TAG=$(shell git rev-list HEAD --max-count=1 --abbrev-commit)
+TAG=$(shell cat version | awk '{gsub("\\.", ""); print}')
 PROJECT_NAME := $(NAME)-$(TAG)
 PROJECT_DIR := $(PWD)
 DEPLOYMENT_DIR := $(PROJECT_DIR)/docker
