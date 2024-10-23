@@ -102,14 +102,15 @@ Eventually, it's up to you that how to use these endpoints in your project.
 As follows, the table shows us the event types:
 > `tv` stands for `telemetry variable`
 
-| Code      | Value                                 | Description           |
-| -----     | ---                                   | -----                 |
-| `tv001`   | `string`                              | `pid`                 |
-| `tv002`   | `string`                              | `sid`                 |
-| `tv003`   | `web` \| `mobile`                     | `channel`             |
-| `tv004`   | `click` \| `impression`               | `event action`        |
-| `tv005`   | `search` \| `ad` \| `component`       | `event group`         |
-| `tv006`   | `beacon` \| `other`                   | `sender`              |
+| Code              | Value                                 | Description           |
+| -----             | ---                                   | -----                 |
+| `pid`             | `string`                              | `pid`                 |
+| `sid`             | `string`                              | `sid`                 |
+| `channel`         | `web` \| `mobile`                     | `channel`             |
+| `event`           | `click` \| `impression`               | `event action`        |
+| `eventGroup`      | `search` \| `ad` \| `component`       | `event group`         |
+| `senderMethod`    | `beacon` \| `other`                   | `sender method`       |
+| `ip`              | `string`                              | `ip address`          |
 
 # Changelogs
 - [v0.1.0-alpha.1 - 03/10/2024](/services/clickstream/src/collector/CHANGELOG.md#v010-alpha1---03102024)
