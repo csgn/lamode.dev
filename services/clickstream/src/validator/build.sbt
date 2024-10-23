@@ -5,7 +5,7 @@ lazy val root = project
     version := {
       val source = scala.io.Source.fromFile("version")
       try {
-        source.mkString
+        source.mkString.strip()
       } finally {
         source.close()
       }

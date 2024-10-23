@@ -11,4 +11,7 @@ case class KafkaProperties(
     bootstrapServers: String,
     topic: String
 ) extends StreamProperties
-case class HadoopProperties() extends StreamProperties
+case class HadoopProperties(
+    uri: String,
+    dataFolder: String
+) extends StreamProperties

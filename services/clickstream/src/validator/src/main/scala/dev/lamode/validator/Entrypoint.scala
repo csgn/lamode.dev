@@ -19,7 +19,10 @@ private[validator] object Entrypoint extends App {
     topic = envOrElse("KAFKA_TOPIC", "clickstream-dev-topic")
   )
 
-  implicit val hadoopProps = HadoopProperties()
+  implicit val hadoopProps = HadoopProperties(
+    uri = envOrElse("HADOOP_URI", "hdfs://localhost:9000"),
+    dataFolder = envOrElse("HADOOP_DATA_FOLDER", "data")
+  )
 
   println()
   println("============= SPARK JOB OUTPUT =============")

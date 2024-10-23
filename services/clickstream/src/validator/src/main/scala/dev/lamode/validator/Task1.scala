@@ -65,10 +65,11 @@ private[validator] case class Task1(
       sparkContext: SparkContext
   ): DataStreamWriter[Row] = {
     result.writeStream
-      .format("console")
+      .format("json")
+      .outputMode("append")
       .trigger(Trigger.ProcessingTime("1 second"))
-      .option("truncate", "false")
-      .outputMode("update")
+      .option("path", s"${hadoopProps.uri}/${hadoopProps.dataFolder}")
+      .option("checkpointLocation", s"${hadoopProps.uri}/checkpoints")
   }
 
   override def run()(implicit
