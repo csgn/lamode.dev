@@ -1,0 +1,13 @@
+services:
+  validator:
+    build:
+      context: ../src/validator
+      dockerfile: Dockerfile.dev
+    ports:
+      - 4040:4040
+    depends_on:
+      kafka:
+        condition: service_healthy
+    environment:
+      KAFKA_ADDR: ${KAFKA_ADDR:?error}
+      KAFKA_TOPIC: ${KAFKA_TOPIC:?error}

@@ -23,13 +23,15 @@ behaviour.
 ```mermaid
 flowchart TD
     %% Event Collector Components
+        EXTERNAL_USER(("User"))
         EC_GO("Go")
         EC_KAFKA(["Kafka"])
-        EXTERNAL_USER(("User"))
+        EC_VALIDATOR("Validator")
 
         %% Style
             style EC_GO fill:#00ADD8,stroke:#00728f,color:#fff
             style EC_KAFKA fill:#444,stroke:#333,color:#fff
+            style EC_VALIDATOR fill:#DF3D3B,stroke:#DF3D3B,color:#fff
     %% %
 
     %% Storage Components
@@ -61,6 +63,7 @@ flowchart TD
         subgraph "event_collector" ["Event Collector"]
             EC_GO
             EC_KAFKA
+            EC_VALIDATOR 
         end
 
 
@@ -79,7 +82,9 @@ flowchart TD
     %% Relations
         EXTERNAL_USER -.-> event_collector
         
-        EC_GO -- "raw event" --> EC_KAFKA -- "raw event" --> HADOOP
+        EC_GO -- "raw event" --> EC_KAFKA
+        EC_KAFKA -- "raw event" --> EC_VALIDATOR 
+        EC_VALIDATOR -- "validated event" --> HADOOP
 
         HADOOP -- "read raw event" --> DP_SPARK
 
