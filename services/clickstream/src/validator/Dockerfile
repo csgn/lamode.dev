@@ -32,7 +32,7 @@ COPY . .
 
 RUN sbt clean package
 
-ENV TARGET_JAR=/app/target/scala-2.12/${JOB_NAME}_2.12-$(cat version).jar
+ENV TARGET_JAR=/app/target/scala-2.12/${JOB_NAME}_2.12-0.1.0-alpha.1.jar
 
 
 CMD ["sh", "-c", "spark-submit --packages org.apache.spark:spark-sql-kafka-0-10_${SCALA_VERSION}:${SPARK_VERSION} --deploy-mode client ${TARGET_JAR}"]
