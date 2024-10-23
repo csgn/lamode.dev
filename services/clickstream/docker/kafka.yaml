@@ -6,7 +6,6 @@ services:
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
-
   kafka:
     image: confluentinc/cp-kafka:7.5.0
     ports:
@@ -26,3 +25,15 @@ services:
       interval: 10s
       timeout: 60s
       retries: 60
+  kafka-setup:
+    image: confluentinc/cp-kafka:7.5.0
+    depends_on:
+      - kafka
+    environment:
+      KAFKA_BROKER_ID: ignored
+      KAFKA_ZOOKEEPER_CONNECT: ignored
+    command: "bash -c 'echo Waiting for Kafka to be ready... && \
+              cub kafka-ready -b ${KAFKA_ADDR} 1 20 && \
+              kafka-topics --create --if-not-exists --partitions 1 --replication-factor 1 --bootstrap-server ${KAFKA_ADDR} --topic ${KAFKA_TOPIC} && \
+              echo Waiting 60 seconds for Connect to be ready... && \
+              sleep 60'"
