@@ -3,8 +3,7 @@ package validator
 import scala.util.Properties.envOrElse
 
 import org.apache.spark.SparkContext
-import org.apache.spark.sql._
-import org.apache.spark.sql.functions._
+import org.apache.spark.sql.{SparkSession}
 
 private[validator] object Entrypoint extends App {
   implicit val spark = SparkSession.builder
