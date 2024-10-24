@@ -6,8 +6,7 @@
     <span>Kafka</span>
 </p>
 
-
-# Overview
+<a href="/services/clickstream/src/kafka/README.md">README</a>
 
 # Changelogs
 - [v0.1.0-alpha.1](/services/clickstream/src/kafka/CHANGELOG.md#v010-alpha1)

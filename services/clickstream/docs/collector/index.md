@@ -6,6 +6,8 @@
     <span>Collector</span>
 </p>
 
+<a href="/services/clickstream/src/collector/README.md">README</a>
+
 # Overview
 The `Collector`, collects the `raw event(s)` data from the source and sends it
 into the specified `Kafka` topic. The Collector provides an HTTP server 

@@ -6,6 +6,8 @@
     <span>Validator</span>
 </p>
 
+<a href="/services/clickstream/src/validator/README.md">README</a>
+
 # Overview
 The `Validator` is a Spark streaming job in order to validate events.
 
