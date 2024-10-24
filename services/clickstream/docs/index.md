@@ -8,4 +8,5 @@
 # Components
 1. [Collector](collector/index.md)
 2. [Kafka](kafka/index.md)
-2. [Validator](validator/index.md)
+3. [Validator](validator/index.md)
+4. [Hadoop](hadoop/index.md)

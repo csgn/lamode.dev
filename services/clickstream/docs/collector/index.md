@@ -100,7 +100,6 @@ Eventually, it's up to you that how to use these endpoints in your project.
 
 # Events
 As follows, the table shows us the event types:
-> `tv` stands for `telemetry variable`
 
 | Code              | Value                                 | Description           |
 | -----             | ---                                   | -----                 |
@@ -113,4 +112,4 @@ As follows, the table shows us the event types:
 | `ip`              | `string`                              | `ip address`          |
 
 # Changelogs
-- [v0.1.0-alpha.1 - 03/10/2024](/services/clickstream/src/collector/CHANGELOG.md#v010-alpha1---03102024)
+- [v0.1.0-alpha.1](/services/clickstream/src/collector/CHANGELOG.md#v010-alpha1)

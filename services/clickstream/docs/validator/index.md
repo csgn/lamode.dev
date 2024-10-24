@@ -43,4 +43,4 @@ flowchart TD
 > [Diagram Reference](/docs/services/clickstream/index.md#architecture)
 
 # Changelogs
-- [v0.1.0-alpha.1 - 23/10/2024](/services/clickstream/src/validator/CHANGELOG.md#v010-alpha1---23102024)
+- [v0.1.0-alpha.1](/services/clickstream/src/validator/CHANGELOG.md#v010-alpha1)
