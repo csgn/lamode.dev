@@ -11,7 +11,7 @@ private[validator] case class Task1(
     hadoopProps: HadoopProperties
 ) extends Task {
 
-  // Rely upon the table at "services/clickstream/docs/collector/index.md#events"
+  // Must respect the table at "services/clickstream/docs/collector/index.md#events"
   private val schema = StructType(
     Array(
       StructField("pid", StringType),
@@ -20,7 +20,8 @@ private[validator] case class Task1(
       StructField("event", StringType),
       StructField("eventGroup", StringType),
       StructField("senderMethod", StringType),
-      StructField("ip", StringType)
+      StructField("ip", StringType),
+      StructField("createdAt", StringType)
     )
   )
 

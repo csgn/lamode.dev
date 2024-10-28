@@ -103,15 +103,16 @@ Eventually, it's up to you that how to use these endpoints in your project.
 # Events
 As follows, the table shows us the event types:
 
-| Code              | Value                                 | Description           |
-| -----             | ---                                   | -----                 |
-| `pid`             | `string`                              | `pid`                 |
-| `sid`             | `string`                              | `sid`                 |
-| `channel`         | `web` \| `mobile`                     | `channel`             |
-| `event`           | `click` \| `impression`               | `event action`        |
-| `eventGroup`      | `search` \| `ad` \| `component`       | `event group`         |
-| `senderMethod`    | `beacon` \| `other`                   | `sender method`       |
-| `ip`              | `string`                              | `ip address`          |
+| Code              | Value                                 | Description           | Required             |
+| ---               | ---                                   | ---                   | ---                  |
+| `pid`             | `string`                              | `pid`                 | yes                  |                     
+| `sid`             | `string`                              | `sid`                 | yes                  |
+| `channel`         | `web` \| `mobile`                     | `channel`             | yes                  |
+| `event`           | `click` \| `impression`               | `event action`        | yes                  |
+| `eventGroup`      | `search` \| `ad` \| `component`       | `event group`         | yes                  |
+| `senderMethod`    | `beacon` \| `other`                   | `sender method`       | yes                  |
+| `ip`              | `string`                              | `ip address`          | yes                  |
+| `createdAt`       | `string`                              | `event creation time` | yes                  |
 
 # Changelogs
 - [v0.1.0-alpha.1](/services/clickstream/src/collector/CHANGELOG.md#v010-alpha1)
