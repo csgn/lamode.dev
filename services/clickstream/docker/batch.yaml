@@ -1,0 +1,12 @@
+services:
+  batch:
+    build:
+      context: ../src/batch
+      dockerfile: Dockerfile
+    ports:
+      - 8888:8888
+    depends_on:
+      - hadoop
+    environment:
+      HADOOP_URI: ${HADOOP_URI:?error}
+      HADOOP_DATA_FOLDER: ${HADOOP_DATA_FOLDER:?error}

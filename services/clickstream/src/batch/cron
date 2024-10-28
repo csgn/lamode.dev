@@ -1,0 +1,1 @@
+* * * * * /bin/bash /app/scripts/job.sh >> /var/log/cron.log 2>${CRON_ERROR_LOG_PATH}
