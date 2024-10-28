@@ -1,10 +1,10 @@
 FROM eclipse-temurin:11-alpine AS builder
 
 ENV JOB_NAME=validator
-ENV SPARK_VERSION=3.5.1
+ENV SPARK_VERSION=3.5.3
 ENV SCALA_VERSION=2.12
 ENV SBT_VERSION=1.10.2
-ENV SPARK_TGZ_URL=https://archive.apache.org/dist/spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-hadoop3.tgz
+ENV SPARK_TGZ_URL=https://dlcdn.apache.org/spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-hadoop3.tgz
 ENV SBT_TGZ_URL=https://github.com/sbt/sbt/releases/download/v${SBT_VERSION}/sbt-${SBT_VERSION}.tgz
 ENV SPARK_HOME=/opt/spark
 ENV SBT_HOME=/opt/sbt
