@@ -1,7 +1,7 @@
 # Welcome lamode
 
 <p align="center">
-    <img src="/docs/images/icon.png" width="256" height="256" />
+    <img src="/docs/resources/images/icon.png" width="256" height="256" />
 </p>
 
 <p align="center">

@@ -8,39 +8,14 @@
 
 <a href="/services/clickstream/src/collector/README.md">README</a>
 
+<p align="center">
+    <img src="/services/clickstream/docs/resources/images/clickstream_collector.png" width="256" height="256" />
+</p>
+
 # Overview
 The `Collector`, collects the `raw event(s)` data from the source and sends it
 into the specified `Kafka` topic. The Collector provides an HTTP server 
 and the server provides [endpoints](#endpoints) in order to collects event(s).
-
-# Architecture
-```mermaid
-flowchart TD
-    %% Event Collector Components
-        EC_GO("Go")
-        EC_KAFKA(["Kafka"])
-        EXTERNAL_USER(("User"))
-
-        %% Style
-            style EC_GO fill:#00ADD8,stroke:#00728f,color:#fff
-            style EC_KAFKA fill:#444,stroke:#333,color:#fff
-    %% %
-
-    %% Subgraphs
-        subgraph "event_collector" ["Event Collector"]
-            EC_GO
-            EC_KAFKA
-        end
-    %% %
-
-    %% Relations
-        EXTERNAL_USER -.-> event_collector
-        
-        EC_GO -- "raw event" --> EC_KAFKA
-    %% %
-```
-> [Diagram Reference](/docs/services/clickstream/index.md#architecture)
-
 
 # Endpoints
 ```http

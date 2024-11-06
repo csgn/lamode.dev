@@ -1,7 +1,7 @@
 # Clickstream
 
 <p align="center">
-    <img src="docs/images/clickstream.png" width="256" height="256" />
+    <img src="docs/resources/images/clickstream.png" width="256" height="256" />
 </p>
 
 <p align="center">

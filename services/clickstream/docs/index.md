@@ -6,8 +6,8 @@
 </p>
 
 # Components
-1. [Collector](collector/index.md)
-2. [Kafka](kafka/index.md)
-3. [Validator](validator/index.md)
-4. [Hadoop](hadoop/index.md)
-4. [Batch](batch/index.md)
+1. [Collector](components/collector/index.md)
+2. [Kafka](components/kafka/index.md)
+3. [Validator](components/validator/index.md)
+4. [Hadoop](components/hadoop/index.md)
+4. [Batch](components/batch/index.md)

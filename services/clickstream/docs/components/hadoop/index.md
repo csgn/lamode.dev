@@ -8,6 +8,10 @@
 
 <a href="/services/clickstream/src/hadoop/README.md">README</a>
 
+<p align="center">
+    <img src="/services/clickstream/docs/resources/images/clickstream_hadoop.png" width="256" height="256" />
+</p>
+
 # Overview
 Hadoop stores the validated and processed events as JSON format.
 

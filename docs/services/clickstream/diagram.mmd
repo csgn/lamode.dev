@@ -1,0 +1,97 @@
+%% docs/resources/diagrams/clickstream-diagram.png
+
+graph LR
+%% Components
+    client((
+        <div style="width:48px;height:auto;">
+            <img src="https://raw.githubusercontent.com/gist/csgn/bf32c290e6a395de55268f75f0e5af2f/raw/f4477914c6a4027c1ee4a047cf80a56829931b1b/user.svg"/>
+        </div>
+    ))
+
+    collector(
+        <div style="width:48px;height:auto;margin:0 3px;">
+            <img src="https://raw.githubusercontent.com/gist/csgn/bf32c290e6a395de55268f75f0e5af2f/raw/7e32bac6bfbbc40b314eff31adab396f3854b1c1/golang.svg"/>
+        </div>
+        Collector
+    )
+
+    collector_broker(
+        <div style="width:48px;height:auto">
+            <img src="https://raw.githubusercontent.com/gist/csgn/bf32c290e6a395de55268f75f0e5af2f/raw/7e32bac6bfbbc40b314eff31adab396f3854b1c1/apache-kafka.svg"/>
+        </div>
+    )
+
+    collector_ingest(
+        <div style="width:48px;height:auto;margin:5px 48px;">
+            <img src="https://raw.githubusercontent.com/gist/csgn/bf32c290e6a395de55268f75f0e5af2f/raw/7e32bac6bfbbc40b314eff31adab396f3854b1c1/apache-spark.svg"/>
+        </div>
+        Validate & Ingest
+    )
+
+    hdfs[(
+        <div style="width:64px;height:auto;">
+            <img src="https://raw.githubusercontent.com/gist/csgn/bf32c290e6a395de55268f75f0e5af2f/raw/7e32bac6bfbbc40b314eff31adab396f3854b1c1/apache-hadoop.svg"/>
+        </div>  
+    )]
+
+    batch_job(
+        <div style="width:48px;height:auto;margin:5px 5px;">
+            <img src="https://raw.githubusercontent.com/gist/csgn/bf32c290e6a395de55268f75f0e5af2f/raw/7e32bac6bfbbc40b314eff31adab396f3854b1c1/apache-spark.svg"/>
+        </div>
+        Job
+    )
+
+    batch_airflow_scheduler(
+        <div style="width:48px;height:auto;margin:5px 32px;">
+            <img src="https://raw.githubusercontent.com/gist/csgn/bf32c290e6a395de55268f75f0e5af2f/raw/7e32bac6bfbbc40b314eff31adab396f3854b1c1/apache-airflow.svg"/>
+        </div>
+        Job Scheduler
+    )
+
+    internal_consumers((
+        <div style="width:64px;height:auto;">
+            <img src="https://raw.githubusercontent.com/gist/csgn/bf32c290e6a395de55268f75f0e5af2f/raw/88157206502ff6c077a9946767a28f35a6e12e08/users.svg"/>
+        </div>
+    ))
+
+    %% Styles
+        style client                    stroke:#ffffff,fill:#ffffff
+        style collector                 stroke:#111111
+        style collector_broker          stroke:#000000,fill:#ffffff
+        style collector_ingest          stroke:#ca4000
+        style batch_job                 stroke:#ca4000
+        style batch_airflow_scheduler   stroke:#0052cc
+        style internal_consumers        stroke:#ffffff,fill:#ffffff
+    %% %
+%% %
+
+%% Subgraphs
+    subgraph Collector Service
+        collector
+        collector_broker
+        collector_ingest
+    end
+
+    subgraph Batch Service
+        batch_job
+        batch_airflow_scheduler
+    end
+
+    subgraph Internal Consumers
+        internal_consumers
+    end
+
+    %% Styles
+    %% %
+%% %
+
+%% Relations
+    client    --raw event--> collector
+    collector --raw event--> collector_broker --raw event--> collector_ingest --validated event--> hdfs
+
+    batch_airflow_scheduler -.trigger.->               batch_job        
+    hdfs                    --read raw event-->        batch_job
+    batch_job               --write processed event--> hdfs
+
+    hdfs --read--> internal_consumers
+%% %
