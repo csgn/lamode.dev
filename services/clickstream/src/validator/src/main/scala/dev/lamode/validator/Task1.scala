@@ -69,7 +69,7 @@ private[validator] case class Task1(
     result.writeStream
       .format("json")
       .outputMode("append")
-      .trigger(Trigger.ProcessingTime("1 second"))
+      .trigger(Trigger.ProcessingTime("40 second"))
       .option("path", s"${hadoopProps.uri}/${hadoopProps.dataFolder}")
       .option("checkpointLocation", s"${hadoopProps.uri}/checkpoints")
   }

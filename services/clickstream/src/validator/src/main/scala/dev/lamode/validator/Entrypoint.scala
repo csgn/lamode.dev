@@ -20,7 +20,7 @@ private[validator] object Entrypoint extends App {
 
   implicit val hadoopProps = HadoopProperties(
     uri = envOrElse("HADOOP_URI", "hdfs://localhost:9000"),
-    dataFolder = envOrElse("HADOOP_DATA_FOLDER", "data")
+    dataFolder = envOrElse("HADOOP_RAW_EVENTS_DIR", "data")
   )
 
   println()
