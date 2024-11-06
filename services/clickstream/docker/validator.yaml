@@ -12,4 +12,4 @@ services:
       KAFKA_ADDR: ${KAFKA_ADDR:?error}
       KAFKA_TOPIC: ${KAFKA_TOPIC:?error}
       HADOOP_URI: ${HADOOP_URI:?error}
-      HADOOP_DATA_FOLDER: ${HADOOP_DATA_FOLDER:?error}
+      HADOOP_RAW_EVENTS_DIR: ${HADOOP_RAW_EVENTS_DIR:?error}

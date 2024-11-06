@@ -5,8 +5,12 @@ services:
       dockerfile: Dockerfile
     ports:
       - 8888:8888
+      - 8080:8080
     depends_on:
       - hadoop
     environment:
       HADOOP_URI: ${HADOOP_URI:?error}
-      HADOOP_DATA_FOLDER: ${HADOOP_DATA_FOLDER:?error}
+      HADOOP_RAW_EVENTS_DIR: ${HADOOP_RAW_EVENTS_DIR:?error}
+      HADOOP_STAGE_EVENTS_DIR: ${HADOOP_STAGE_EVENTS_DIR:?error}
+      HADOOP_FINAL_EVENTS_DIR: ${HADOOP_FINAL_EVENTS_DIR:?error}
+      HADOOP_ARCHIVE_EVENTS_DIR: ${HADOOP_ARCHIVE_EVENTS_DIR:?error}
