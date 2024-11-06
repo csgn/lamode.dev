@@ -1,14 +1,11 @@
 FROM eclipse-temurin:11-jdk-focal
 
 RUN apt-get update -y \
-    && export DEBIAN_FRONTEND=noninteractive && apt-get install -y --no-install-recommends sudo ssh wget \
+    && export DEBIAN_FRONTEND=noninteractive && apt-get install -y --no-install-recommends sudo ssh wget cron \
     && apt-get clean
-RUN useradd -m hduser && echo "hduser:supergroup" | chpasswd && adduser hduser sudo && echo "hduser ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 COPY conf/ssh_config /etc/ssh/ssh_config
 
-WORKDIR /home/hduser
-USER hduser
 RUN ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa && cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys && chmod 0600 ~/.ssh/authorized_keys
 
 ENV HADOOP_VERSION=3.4.0
@@ -21,12 +18,12 @@ RUN wget -nv -O hadoop.tar.gz "${HADOOP_TGZ_URL}"; \
     rm hadoop.tar.gz; \
     rm -rf ${HADOOP_HOME}/share/doc
 
-ENV HDFS_NAMENODE_USER=hduser
-ENV HDFS_DATANODE_USER=hduser
-ENV HDFS_SECONDARYNAMENODE_USER=hduser
+ENV HDFS_NAMENODE_USER=root
+ENV HDFS_DATANODE_USER=root
+ENV HDFS_SECONDARYNAMENODE_USER=root
 
-ENV YARN_RESOURCEMANAGER_USER=hduser
-ENV YARN_NODEMANAGER_USER=hduser
+ENV YARN_RESOURCEMANAGER_USER=root
+ENV YARN_NODEMANAGER_USER=root
 
 RUN echo "export JAVA_HOME=/opt/java/openjdk/" >> $HADOOP_HOME/etc/hadoop/hadoop-env.sh
 COPY conf/core-site.xml $HADOOP_HOME/etc/hadoop/
@@ -41,7 +38,8 @@ EXPOSE 50070 50075 50010 50020 50090 8020 9000 9864 9870 10020 19888 8088 8030 8
 WORKDIR /usr/local/bin
 RUN sudo ln -s ${HADOOP_HOME}/etc/hadoop/entrypoint.sh .
 
-WORKDIR /home/hduser
 ENV YARNSTART=0
+
+WORKDIR /app
 
 ENTRYPOINT [ "/usr/local/bin/entrypoint.sh" ]
