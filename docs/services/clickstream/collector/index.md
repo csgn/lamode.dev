@@ -2,15 +2,10 @@
     <a href="/docs/index.md">Home</a> /
     <a href="/docs/services/index.md">Services</a> /
     <a href="/docs/services/clickstream/index.md">Clickstream</a> /
-    <a href="/services/clickstream/docs/index.md">Components</a> /
     <span>Collector</span>
 </p>
 
 <a href="/services/clickstream/src/collector/README.md">README</a>
-
-<p align="center">
-    <img src="/services/clickstream/docs/resources/images/clickstream_collector.png" width="256" height="256" />
-</p>
 
 # Overview
 The `Collector`, collects the `raw event(s)` data from the source and sends it
