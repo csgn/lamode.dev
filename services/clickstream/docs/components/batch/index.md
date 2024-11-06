@@ -13,7 +13,7 @@
 </p>
 
 # Overview
-Batch processing for raw events.
+There are few jobs in order to perform ETL process and we are using `Apache Airflow` for scheduling them.
 
 # Changelogs
 - [v0.1.0-alpha.1](/services/clickstream/src/batch/CHANGELOG.md#v010-alpha1)
