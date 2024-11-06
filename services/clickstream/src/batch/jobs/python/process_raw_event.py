@@ -1,6 +1,4 @@
 import os
-import sys
-import pyspark
 from pyspark.sql import SparkSession
 from pyspark.sql.types import StructType, StructField, StringType
 
@@ -13,9 +11,10 @@ def getenv(env):
 
 
 HADOOP_URI = getenv("HADOOP_URI")
-HADOOP_DATA_FOLDER = getenv("HADOOP_DATA_FOLDER")
+HADOOP_STAGE_EVENTS_DIR = getenv("HADOOP_STAGE_EVENTS_DIR")
+HADOOP_FINAL_EVENTS_DIR = getenv("HADOOP_FINAL_EVENTS_DIR")
 
-# Must respect the table at "services/clickstream/docs/collector/index.md#events"
+# Must respect the table at "services/clickstream/docs/components/collector/index.md#events"
 eventSchema = StructType(
     [
         StructField("pid", StringType(), True),
@@ -29,6 +28,8 @@ eventSchema = StructType(
     ]
 )
 
-spark = SparkSession.builder.master("local").appName("batch").getOrCreate()
-data = spark.read.json(f"{HADOOP_URI}/{HADOOP_DATA_FOLDER}", schema=eventSchema)
-data.show(5)
+spark = SparkSession.builder.master("local").appName("process_raw_event").getOrCreate()
+df = spark.read.json(f"{HADOOP_URI}/{HADOOP_STAGE_EVENTS_DIR}", schema=eventSchema)
+df.write.save(
+    f"{HADOOP_URI}/{HADOOP_FINAL_EVENTS_DIR}", format="parquet", mode="append"
+)
