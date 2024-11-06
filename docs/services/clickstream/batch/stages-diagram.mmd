@@ -1,0 +1,9 @@
+%% docs/resources/diagrams/clickstream-batch-stages-diagram.png
+
+stateDiagram-v2
+    [*] --> move_raw_events_task
+    move_raw_events_task --> [*]: failed
+    move_raw_events_task --> process_raw_events_task: success
+    process_raw_events_task --> [*]: failed
+    process_raw_events_task --> move_stage_events_task: success
+    move_stage_events_task --> [*]
