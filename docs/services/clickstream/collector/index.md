@@ -48,7 +48,7 @@ clients, however, may not support. Therefore, we should use
 the `/pixel` endpoint in that case. The `/pixel` sends the event data within
 its query and returns a `1px` image as a response.
 
-Both endpoint responses are returns `200 OK` because we won't show an error
+Both endpoint responses are returns `200 OK` because we don't want to show an error
 on the client side or resend the event. We always assume that the events which we sent,
 are always arrived to the Collector.
 
