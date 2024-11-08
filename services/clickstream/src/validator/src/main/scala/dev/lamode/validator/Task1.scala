@@ -15,13 +15,12 @@ private[validator] case class Task1(
   private val schema = StructType(
     Array(
       StructField("pid", StringType),
-      StructField("sid", StringType),
       StructField("channel", StringType),
       StructField("event", StringType),
-      StructField("eventGroup", StringType),
+      StructField("interaction", StringType),
       StructField("senderMethod", StringType),
-      StructField("ip", StringType),
-      StructField("createdAt", StringType)
+      StructField("createdAt", StringType),
+      StructField("productId", StringType)
     )
   )
 
@@ -69,7 +68,7 @@ private[validator] case class Task1(
     result.writeStream
       .format("json")
       .outputMode("append")
-      .trigger(Trigger.ProcessingTime("40 second"))
+      .trigger(Trigger.ProcessingTime("1 second"))
       .option("path", s"${hadoopProps.uri}/${hadoopProps.dataFolder}")
       .option("checkpointLocation", s"${hadoopProps.uri}/checkpoints")
   }

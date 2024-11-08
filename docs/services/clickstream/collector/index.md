@@ -76,12 +76,10 @@ As follows, the table shows us the event types:
 | Code              | Value                                 | Description           | Required             |
 | ---               | ---                                   | ---                   | ---                  |
 | `pid`             | `string`                              | `pid`                 | yes                  |                     
-| `sid`             | `string`                              | `sid`                 | yes                  |
+| `productId`       | `string`                              | `product id`          | false                |                     
 | `channel`         | `web` \| `mobile`                     | `channel`             | yes                  |
 | `event`           | `click` \| `impression`               | `event action`        | yes                  |
-| `eventGroup`      | `search` \| `ad` \| `component`       | `event group`         | yes                  |
-| `senderMethod`    | `beacon` \| `other`                   | `sender method`       | yes                  |
-| `ip`              | `string`                              | `ip address`          | yes                  |
+| `interaction`     | `search` \| `ad` \| `component`       | `interaction type`    | yes                  |
 | `createdAt`       | `string`                              | `event creation time` | yes                  |
 
 # Changelogs
