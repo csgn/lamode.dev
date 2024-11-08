@@ -1,6 +1,8 @@
 import os
+
 from pyspark.sql import SparkSession
 from pyspark.sql.types import StructType, StructField, StringType
+import pyspark.sql.functions as F
 
 
 def getenv(env):
@@ -14,22 +16,27 @@ HADOOP_URI = getenv("HADOOP_URI")
 HADOOP_STAGE_EVENTS_DIR = getenv("HADOOP_STAGE_EVENTS_DIR")
 HADOOP_FINAL_EVENTS_DIR = getenv("HADOOP_FINAL_EVENTS_DIR")
 
-# Must respect the table at "services/clickstream/docs/components/collector/index.md#events"
+# Must respect the table at "/docs/services/clickstream/collector/index.md#events"
 eventSchema = StructType(
     [
         StructField("pid", StringType(), True),
-        StructField("sid", StringType(), True),
+        StructField("productId", StringType(), False),
         StructField("channel", StringType(), True),
         StructField("event", StringType(), True),
-        StructField("eventGroup", StringType(), True),
-        StructField("senderMethod", StringType(), True),
-        StructField("ip", StringType(), True),
+        StructField("interaction", StringType(), True),
         StructField("createdAt", StringType(), True),
     ]
 )
 
+channels = ["mobile", "web"]
+
 spark = SparkSession.builder.master("local").appName("process_raw_event").getOrCreate()
 df = spark.read.json(f"{HADOOP_URI}/{HADOOP_STAGE_EVENTS_DIR}", schema=eventSchema)
-df.write.save(
-    f"{HADOOP_URI}/{HADOOP_FINAL_EVENTS_DIR}", format="parquet", mode="append"
-)
+
+for channel in channels:
+    channelDf = df.where(F.expr("channel") == channel)
+    channelDf.write.save(
+        f"{HADOOP_URI}/{HADOOP_FINAL_EVENTS_DIR}/{channel}",
+        format="parquet",
+        mode="append",
+    )

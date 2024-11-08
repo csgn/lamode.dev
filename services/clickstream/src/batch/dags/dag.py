@@ -7,13 +7,9 @@ from airflow.contrib.operators.spark_submit_operator import SparkSubmitOperator
 
 with DAG(
     "dag",
-    default_args={
-        "retries": 1,
-        "retry_delay": timedelta(seconds=5),
-    },
     description="A simple DAG",
-    schedule=timedelta(minutes=1),
-    start_date=datetime(2024, 11, 6),
+    schedule="@daily",
+    start_date=datetime(2024, 11, 8),
     catchup=False,
 ) as dag:
     start = DummyOperator(
