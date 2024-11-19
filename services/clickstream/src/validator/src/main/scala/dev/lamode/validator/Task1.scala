@@ -16,8 +16,8 @@ private[validator] case class Task1(
     Array(
       StructField("pid", StringType),
       StructField("channel", StringType),
-      StructField("event", StringType),
-      StructField("interaction", StringType),
+      StructField("action", StringType),
+      StructField("type", StringType),
       StructField("senderMethod", StringType),
       StructField("createdAt", StringType),
       StructField("productId", StringType)

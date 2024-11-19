@@ -1,3 +1,4 @@
+import os
 from datetime import datetime, timedelta
 
 from airflow.models.dag import DAG
@@ -26,6 +27,14 @@ with DAG(
     t2 = SparkSubmitOperator(
         task_id="process_raw_event_task",
         application="/opt/airflow/jobs/python/process_raw_event.py",
+        application_args=[
+            # --hadoop-uri
+            os.getenv("HADOOP_URI"),
+            # --hadoop-src-dir
+            os.getenv("HADOOP_STAGE_EVENTS_DIR"),
+            # --hadoop-dest-dir
+            os.getenv("HADOOP_FINAL_EVENTS_DIR"),
+        ],
         env_vars={
             "HADOOP_CONF_DIR": "/opt/hadoop",
             "YARN_CONF_DIR": "/opt/hadoop",
