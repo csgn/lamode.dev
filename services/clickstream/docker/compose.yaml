@@ -1,6 +1,6 @@
 include:
   - docker/kafka.yaml
   - docker/collector.yaml
-  - docker/validator.yaml
+  - docker/ingest.yaml
   - docker/hadoop.yaml
   - docker/batch.yaml

@@ -1,6 +1,6 @@
 FROM eclipse-temurin:11-alpine AS builder
 
-ENV JOB_NAME=validator
+ENV JOB_NAME=ingest
 ENV SPARK_VERSION=3.5.3
 ENV SCALA_VERSION=2.12
 ENV SBT_VERSION=1.10.2

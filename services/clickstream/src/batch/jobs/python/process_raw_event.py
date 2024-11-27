@@ -2,7 +2,7 @@ import sys
 from typing import Iterator, Tuple
 
 from pyspark.sql import SparkSession, DataFrame
-from pyspark.sql.types import StructType, StructField, StringType
+from pyspark.sql.types import StructType, StructField, StringType, FloatType
 import pyspark.sql.functions as F
 
 
@@ -74,12 +74,17 @@ def main(args: list[str]) -> None:
     # Must respect the table at "/docs/services/clickstream/collector/index.md#events"
     schema = StructType(
         [
-            StructField("pid", StringType(), True),
-            StructField("productId", StringType(), False),
-            StructField("channel", StringType(), True),
-            StructField("action", StringType(), True),
-            StructField("type", StringType(), True),
-            StructField("createdAt", StringType(), True),
+            StructField("sid", StringType(), False),
+            StructField("culture", StringType(), False),
+            StructField("channel", StringType(), False),
+            StructField("action", StringType(), False),
+            StructField("type", StringType(), False),
+            StructField("timestamp", StringType(), False),
+            StructField("ipAddress", StringType(), False),
+            StructField("latitude", FloatType(), False),
+            StructField("longitude", FloatType(), False),
+            StructField("productId", StringType(), True),
+            StructField("searchQuery", StringType(), True),
         ]
     )
 

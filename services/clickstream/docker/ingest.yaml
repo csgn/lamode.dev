@@ -1,7 +1,7 @@
 services:
-  validator:
+  ingest:
     build:
-      context: ../src/validator
+      context: ../src/ingest
       dockerfile: Dockerfile
     ports:
       - 4040:4040

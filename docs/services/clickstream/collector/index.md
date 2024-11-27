@@ -71,16 +71,25 @@ img.onload = function() {
 Eventually, it's up to you that how to use these endpoints in your project.
 
 # Events
-As follows, the table shows us the event types:
+As follows, the JSON shows us the event types:
+```json
+{
+    // Required
+    "sid": "string",            // Logged in user's or guest's session id.
+    "channel": "string",        // Which source does it come from? (e.g., mobile, web etc.)
+    "timestamp": "string",      // ISO 8601 formatted timestamp (e.g., "2024-11-27T15:30:00Z")
+    "culture": "string",        // Which language and country does it come from? (e.g., tr_TR, en_US, en_UK, etc.)
+    "action": "string",         // How the event was occured. (e.g., click, impression)
+    "type": "string",           // What is the event's type? (e.g., search, ad, component, etc.)
+    "ipAddress": "string",      // IP address of the client
+    "latitude": "float",        // Geolocation data
+    "longitude": "float",       // Geolocation data
 
-| Code              | Value                                 | Description           | Required             |
-| ---               | ---                                   | ---                   | ---                  |
-| `pid`             | `string`                              | `pid`                 | yes                  |                     
-| `productId`       | `string`                              | `product id`          | false                |                     
-| `channel`         | `web` \| `mobile`                     | `channel`             | yes                  |
-| `action`          | `click` \| `impression`               | `event's action`      | yes                  |
-| `type`            | `search` \| `ad` \| `component`       | `event's type`        | yes                  |
-| `createdAt`       | `string`                              | `event creation time` | yes                  |
+    // Optional
+    "productId": "string",      // Which product was interacted with?
+    "searchQuery": "string",    // What was searched?
+}
+```
 
 # Changelogs
 - [v0.1.0-alpha.1](/services/clickstream/src/collector/CHANGELOG.md#v010-alpha1)

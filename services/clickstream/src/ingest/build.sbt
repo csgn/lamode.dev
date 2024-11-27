@@ -1,7 +1,7 @@
 lazy val root = project
   .in(file("."))
   .settings(
-    name := "validator",
+    name := "ingest",
     version := {
       val source = scala.io.Source.fromFile("version")
       try {

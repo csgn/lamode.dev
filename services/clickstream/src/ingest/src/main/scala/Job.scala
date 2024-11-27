@@ -1,10 +1,10 @@
-package validator
+package ingest
 
 import org.apache.spark.SparkContext
 import org.apache.spark.sql.{SparkSession, DataFrame, Row}
 import org.apache.spark.sql.streaming.DataStreamWriter
 
-trait Task {
+trait Job {
   protected def read()(implicit
       spark: SparkSession,
       sparkContext: SparkContext

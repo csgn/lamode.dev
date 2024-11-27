@@ -1,4 +1,4 @@
-package validator
+package ingest
 
 import scala.reflect.ClassTag
 

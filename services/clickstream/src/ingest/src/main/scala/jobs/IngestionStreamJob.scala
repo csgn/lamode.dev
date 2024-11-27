@@ -1,28 +1,14 @@
-package validator
+package ingest
 
 import org.apache.spark.SparkContext
 import org.apache.spark.sql._
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.streaming._
-import org.apache.spark.sql.types._
 
-private[validator] case class Task1(
+case class IngestionStreamJob(
     kafkaProps: KafkaProperties,
     hadoopProps: HadoopProperties
-) extends Task {
-
-  // Must respect the table at "services/clickstream/docs/collector/index.md#events"
-  private val schema = StructType(
-    Array(
-      StructField("pid", StringType),
-      StructField("channel", StringType),
-      StructField("action", StringType),
-      StructField("type", StringType),
-      StructField("senderMethod", StringType),
-      StructField("createdAt", StringType),
-      StructField("productId", StringType)
-    )
-  )
+) extends Job {
 
   protected override def read()(implicit
       spark: SparkSession,
@@ -36,12 +22,6 @@ private[validator] case class Task1(
       )
       .option("subscribe", kafkaProps.topic)
       .load()
-
-    // spark.readStream
-    //   .format("socket")
-    //   .option("host", "localhost")
-    //   .option("port", 9876) // nc -l 9876
-    //   .load()
   }
 
   protected override def transform[T](input: DataFrame)(implicit
@@ -55,7 +35,7 @@ private[validator] case class Task1(
         "cast(value as string)"
       )
       .select(
-        from_json($"value", schema).as("value")
+        from_json($"value", EventSchema()).as("value")
       )
       .select("value.*")
       .asInstanceOf[T]
