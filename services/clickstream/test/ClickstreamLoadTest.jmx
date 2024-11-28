@@ -21,7 +21,7 @@
       </ThreadGroup>
       <hashTree>
         <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="CSV Data Set Config">
-          <stringProp name="filename">/home/csgn/Workspaces/lamode/services/clickstream/test/datasets/events_1000.csv</stringProp>
+          <stringProp name="filename">./datasets/events_1000.csv</stringProp>
           <stringProp name="fileEncoding"></stringProp>
           <stringProp name="variableNames">sid,productId,searchQuery,channel,action,type,timestamp,culture,ipAddress,latitude,longitude</stringProp>
           <boolProp name="ignoreFirstLine">true</boolProp>
