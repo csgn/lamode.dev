@@ -8,3 +8,4 @@
 - Added Makefile
 - Added [(modes)](docker/modes/) folder for different deployments environments like development, production, etc.
 - Added batch [(batch/CHANGELOG)](src/batch/CHANGELOG.md) for data processing.
+- Added jMeter load test along with example datasets.
