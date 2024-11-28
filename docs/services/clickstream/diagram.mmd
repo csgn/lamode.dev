@@ -25,7 +25,7 @@ graph LR
         <div style="width:48px;height:auto;margin:5px 48px;">
             <img src="https://raw.githubusercontent.com/gist/csgn/bf32c290e6a395de55268f75f0e5af2f/raw/7e32bac6bfbbc40b314eff31adab396f3854b1c1/apache-spark.svg"/>
         </div>
-        Validate & Ingest
+        Streaming Ingest Job
     )
 
     hdfs[(
@@ -87,7 +87,7 @@ graph LR
 
 %% Relations
     client    --raw event--> collector
-    collector --raw event--> collector_broker --raw event--> collector_ingest --validated event--> hdfs
+    collector --raw event--> collector_broker --raw event--> collector_ingest --raw event--> hdfs
 
     batch_airflow_scheduler -.trigger.->               batch_job        
     hdfs                    --read raw event-->        batch_job
