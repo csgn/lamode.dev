@@ -48,7 +48,8 @@ case class IngestionStreamJob(
     result.writeStream
       .format("json")
       .outputMode("append")
-      .trigger(Trigger.ProcessingTime("1 second"))
+      .trigger(Trigger.ProcessingTime("5 minutes"))
+      .option("maxRecordsPerFile", "100000")
       .option("path", s"${hadoopProps.uri}/${hadoopProps.dataFolder}")
       .option("checkpointLocation", s"${hadoopProps.uri}/checkpoints")
   }
