@@ -20,7 +20,7 @@ with DAG(
     # if this task failed go end otherwise go t2
     t1 = BashOperator(
         task_id="move_raw_events_task",
-        bash_command="/opt/airflow/jobs/scripts/move_raw_events_job.sh ",
+        bash_command="/opt/airflow/jobs/scripts/move_job.sh ${HADOOP_URI}/${HADOOP_RAW_EVENTS_DIR} ${HADOOP_URI}/${HADOOP_STAGE_EVENTS_DIR} ",
     )
 
     # run this task when t1 is succeed
@@ -43,7 +43,7 @@ with DAG(
 
     t3 = BashOperator(
         task_id="move_stage_events_task",
-        bash_command="/opt/airflow/jobs/scripts/move_stage_events_job.sh ",
+        bash_command="/opt/airflow/jobs/scripts/move_job.sh ${HADOOP_URI}/${HADOOP_STAGE_EVENTS_DIR} ${HADOOP_URI}/${HADOOP_ARCHIVE_EVENTS_DIR} ",
     )
 
     end = DummyOperator(
